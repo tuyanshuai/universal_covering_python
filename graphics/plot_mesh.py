@@ -11,10 +11,6 @@ import subprocess
 
 
 def plot_mesh(F, V):
-    tmpfn = sprintf('./tmp.m')
-    write_mfile(tmpfn, F, V)
-    subprocess.run(["bin/minimalM", "-l"])
-
 
 
     # fig = plt.figure()
