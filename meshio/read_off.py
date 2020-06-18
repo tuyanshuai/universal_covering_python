@@ -12,4 +12,4 @@ def read_off(filename):
     file.close()
 
     triangle = numpy.array([f for f in faces if len(f) == 3])
-    return triangle, numpy.array(points)
+    return triangle+1, numpy.array(points)
