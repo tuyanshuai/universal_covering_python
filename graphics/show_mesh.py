@@ -1,9 +1,9 @@
 import subprocess
 from meshio.write_mfile import *
 import os
-def showmesh(F, V):
+def show_mesh(F, V):
 
-    write_mfile("tmp.m", F,V)
+    write_mfile("tmp.m", F+1, V)
     subprocess.call(["miniMeshViewer.exe", "tmp.m"])
     os.remove("tmp.m")
 
