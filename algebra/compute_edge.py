@@ -16,8 +16,7 @@ def compute_edge(face):
     eif = np.zeros(edge.shape)
     neg = edge.shape[0]
     for i in range(0,neg):
-        eif[i, 0] = amd[edge[i, 0], edge[i, 1]]
-        eif[i, 1] = amd[edge[i, 1], edge[i, 0]]
+        eif[i, 0] = amd[edge[i, 0], edge[i, 1]]-1
+        eif[i, 1] = amd[edge[i, 1], edge[i, 0]]-1
 
-    eif = eif-1
     return edge.astype('int'), eif.astype('int')

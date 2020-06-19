@@ -23,21 +23,21 @@ def compute_connectivity(face):
 
     I = np.array([fi,fj,fk])
     J = np.array([fj,fk,fi])
-    V = np.array([ff,ff,ff])
-    vvif = sparse.coo_matrix((V.flatten(), (I.flatten(), J.flatten())))
+    V = np.array([ff,ff,ff])+1   # why add one? because sparse matrix is mixed with zero index.
+    vvif = sparse.csc_matrix((V.flatten(), (I.flatten(), J.flatten())))
     vvif = vvif.tolil()
 
 
     I = np.array([ff,ff,ff])
     J = np.array([fi,fj,fk])
-    V = np.array([fj,fk,fi])
+    V = np.array([fj,fk,fi])+1
     nvif = sparse.coo_matrix((V.flatten(), (I.flatten(), J.flatten())))
     nvif = nvif.tolil()
 
 
     I = np.array([ff,ff,ff])
     J = np.array([fj,fk,fi])
-    V = np.array([fi,fj,fk])
+    V = np.array([fi,fj,fk])+1
     pvif = sparse.coo_matrix((V.flatten(), (I.flatten(), J.flatten())))
     pvif = pvif.tolil()
 
