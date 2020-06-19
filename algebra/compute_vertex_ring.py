@@ -8,7 +8,7 @@ from algebra import *
 from algebra import compute_bd
 
 from dbgtool.dbgtool import *
-
+#TODO: modify to support order
 def compute_vertex_ring(face, vertex, vc = np.array([]), ordered=None):
     nv = np.max(np.max(face)) + 1
     if vc.size ==0:
