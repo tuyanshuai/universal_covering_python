@@ -116,8 +116,9 @@ def compute_greedy_homotopy_basis(face,vertex,bi):
     I = np.delete(I, id2del)
     J = np.delete(J, id2del)
 
-    J = J[np.argsort(J)]
-    I = I[np.argsort(J)]
+    argj = np.argsort(J)
+    J = J[argj]
+    I = I[argj]
 
 
     hb = [list([])]*I.size

@@ -7,14 +7,15 @@ from topology import *
 
 from dbgtool.dbgtool import *
 
-F, V = read_off('data/eightsim.off')
+face, vertex = read_off('data/eightsim.off')
 
 # show_mesh(F, V)
 # compute_dual_graph(F,V)
-u = hyperbolic_ricci_flow(F, V)
+u = hyperbolic_ricci_flow(face, vertex)
 bi = 16
-hb = compute_greedy_homotopy_basis(F, V, bi)
+hb = compute_greedy_homotopy_basis(face, vertex, bi)
 print(hb)
 
+slice_mesh(face,vertex,hb)
 
 

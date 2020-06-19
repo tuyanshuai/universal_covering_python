@@ -20,7 +20,27 @@
 #  father    : double array, nv' x 1, father indicates the vertex on original
 #              mesh that new vertex comes from.
 #
+from algebra import *
 def slice_mesh(face,vertex,ee):
+
+    nv = vertex.shape[0]
+    _, amd = compute_adjacency_matrix(face)
+
+    if isinstance(ee[0], list):
+        ees = list([list(), list()])
+        for ei in ee:
+            ees[0] = ees[0] + ei
+            ees[1] = ees[1] + ei[1::] + [ei[0]]
+        ee = ees
+    ee = np.array(ee).transpose()
+
+    G = sp.csr_matrix((np.ones((ee.shape[0],1)).flatten(), (ee[:,0], ee[:,1])), shape=(nv, nv))
+    G = G + G.transpose()
+
+    ev = np.unique(ee.flatten())
+
+    vr = compute_vertex_ring(face, vertex, ev, ordered = True)
+
 
 
     return None

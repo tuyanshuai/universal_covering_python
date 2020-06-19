@@ -7,14 +7,16 @@ import numpy as np
 from algebra import *
 from algebra import compute_bd
 
+from dbgtool.dbgtool import *
 
-def compute_vertex_ring(face, vertex, ordered=None):
+def compute_vertex_ring(face, vertex, vc = np.array([]), ordered=None):
     nv = np.max(np.max(face)) + 1
-    vc = np.array(range(nv))
+    if vc.size ==0:
+        vc = np.array(range(nv))
     if ordered == None:
         ordered = False
 
-    vr = [[] for i in range(nv)]
+    vr = [[] for i in range(vc.size)]
     bd = compute_bd(face)
     isbd = np.zeros((nv, )).astype(int)
     isbd[bd] = 1
@@ -28,7 +30,7 @@ def compute_vertex_ring(face, vertex, ordered=None):
         vr[J[i]].append(I[i])
 
     if ordered:
-        for i in range(nv):
+        for i in range(vc.size):
 
             vai = np.append(np.append(np.argwhere((face[:, 0] == i)), np.argwhere((face[:, 1] == i))),
                             np.argwhere((face[:, 2] == i)))
