@@ -20,6 +20,16 @@
 from algebra import *
 import scipy.sparse as sp
 from  dbgtool.dbgtool import *
+
+def gen_path(pred, i):
+    path = list([i])
+    while True:
+        if pred[path[0]]<0:
+            break
+        path.insert(0, pred[path[0]])
+
+    return path
+
 def compute_greedy_homotopy_basis(face,vertex,bi):
     nf = face.shape[0]
     nv = vertex.shape[0]
@@ -36,15 +46,86 @@ def compute_greedy_homotopy_basis(face,vertex,bi):
     G = sp.csr_matrix((el, (I, J)), shape=(nv, nv))
     G = G + G.transpose()
 
-    # TODO : find shortest path to graph
+    # find shortest path to graph
+    dist, pred = sp.csgraph.shortest_path(csgraph=G, directed=False, indices=bi, return_predecessors=True)
+    pathes = [list()] * nv
+    for di in range(nv): # destination node
+        pathes[di] = gen_path(pred, di)
 
-    # [dist,path,pred] = graphshortestpath(G,bi,'METHOD','Dijkstra');
-    # % we always use column array
-    # dist = dist(:);
-    # pred = pred(:);
+    amf, _ = compute_dual_graph(face)
+
+    I = np.array(range(nv))
+    I = np.delete(I,bi)
+    J = pred[I]
+
+    I2 = np.array(amd[I,J]).flatten()
+    J2 = np.array(amd[J,I]).flatten()
+    ind = np.argwhere(np.logical_or(I2 == 0 , J2 == 0))
+
+    I2 = np.delete(I2, ind, 0)
+    J2 = np.delete(J2, ind, 0)
+
+    amf[I2-1, J2-1] = 0
+    amf[J2-1, I2-1] = 0
 
 
-    # return hb
+    IJ = np.argwhere(amf)
+    I = IJ[:, 1]
+    J = IJ[:, 0]
 
-    print(G)
-    return None
+    ind = np.argwhere(np.logical_or(eif[:, 0] == -1, eif[:, 1] == -1))
+    eif = np.delete(eif, ind,0)
+    edge = np.delete(edge, ind,0)
+
+
+    ti = np.concatenate((eif[:, 0], eif[:, 1]))
+    tj = np.concatenate((eif[:, 1], eif[:, 0]))
+    tv = np.concatenate((edge[:, 0], edge[:, 1]))
+    F2E = sp.csr_matrix((tv, (ti, tj)), shape=(nf, nf))
+
+    ei = np.concatenate((F2E[I, J], F2E[J,I]), axis=0).transpose()
+
+    dvi = vertex[ei[:, 0].flatten(),:]-vertex[ei[:, 1].flatten(),:]
+    V = -(dist[ei[:, 0]].flatten()+dist[ei[:, 1]].flatten()+ np.linalg.norm(dvi[0], axis=1))
+    amf_w = sp.csr_matrix((V.flatten(), (I, J)), shape=(nf, nf))
+
+
+    tree = sp.csgraph.minimum_spanning_tree(csgraph=amf_w, overwrite=False)
+
+    # tree = tree + tree.transpose()
+    G2 = G.copy()
+    I = np.array(range(nv))
+    I = np.delete(I, bi, 0)
+    J = pred[I]
+    G2[I, J] = 0
+    G2[J, I] = 0
+
+    idij = np.argwhere(tree )
+    I = idij[:, 0]
+    J = idij[:, 1]
+
+    ei = np.concatenate((F2E[I, J], F2E[J,I]), axis=0).transpose()
+    G2[ei[:, 1], ei[:, 0]] = 0
+    G2[ei[:, 0], ei[:, 1]] = 0
+
+    idij = np.argwhere(G2)
+    I = idij[:, 0]
+    J = idij[:, 1]
+
+    id2del = np.argwhere(I<J)
+    I = np.delete(I, id2del)
+    J = np.delete(J, id2del)
+
+    J = J[np.argsort(J)]
+    I = I[np.argsort(J)]
+
+
+    hb = [list([])]*I.size
+    for i in range(I.size):
+        pi = pathes[I[i]]
+        pj = pathes[J[i]]
+        hb[i] = pi+pj[::-1]
+
+    if I.size ==0:
+       hb = np.array([])
+    return hb
