@@ -1,8 +1,7 @@
 # Embed according to the hyperbolic metric
-import numpy as np
 from algebra import *
 from math import *
-from parameterization.circle_circle_intersection import circle_circle_intersection
+from universalcovering.circle_circle_intersection import circle_circle_intersection
 
 # TODO : check the correctness of the function
 def hyper_circle_to_circle(c, r):

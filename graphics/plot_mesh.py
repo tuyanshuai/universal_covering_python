@@ -11,7 +11,7 @@ def plot_mesh(F, V):
     fig = plt.figure()
     ax = Axes3D(fig)
     if V.shape[1] == 2:
-        ax.plot_trisurf(V[:, 0], V[:, 1], 0*V[:, 1], triangles=F, color=(0,0,0,0),edgecolor=(0,0,0), linewidth = 0.5)
+        ax.plot_trisurf(V[:, 0], V[:, 1], 0*V[:, 1], triangles=F, color=(0,0,0,0),edgecolor=(0,0,1), linewidth = 0.5)
         ax.view_init(90, -90)
         ax.set_axis_off()
     if V.shape[1] == 3:
