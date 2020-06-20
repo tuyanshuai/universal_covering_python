@@ -4,4 +4,4 @@ Canonical Coordinate Geometry Learning
 ## Step 1
 Cut the surface and map to Poincare disk
 
-![Image of Yaktocat](screenshot/fig1.png)
+![Image of cutmesh along fundametnal group](screenshot/fig1.png)
