@@ -98,4 +98,4 @@ def hyperbolic_ricci_flow(face,vertex):
             u = u + x.reshape(nv,1)
         return u
 
-    return calculate_metric()
+    return calculate_metric().flatten()

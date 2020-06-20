@@ -13,5 +13,6 @@ u = hyperbolic_ricci_flow(face, vertex)
 bi = 16
 hb = compute_greedy_homotopy_basis(face, vertex, bi)
 face_new,vertex_new,father = slice_mesh(face, vertex, hb)
-
-show_mesh(face_new, vertex_new)
+# show_mesh(face_new, vertex_new)
+z = hyperbolic_embed(face_new,  u[father])
+dump(z)
