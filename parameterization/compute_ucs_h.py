@@ -48,6 +48,16 @@ def  compute_ucs_h(face,vertex,z,hb,father):
             s = s - ms.shape[0]
         # TODO Line 46
         while True:
-            0
+            if sp[s].shape[0] == chain[k].shape[0]:
+                if sp[s] == chain[k]:
+                    break
+            vi0 = np.zeros(sp[s]) # TODO check
+            vi0[sp[ms[s]][0::-1]] = False
+            vi0[sp[s][0::-1]] = True
+            s = s+1
+            if s> ms.shape[0]:
+                s = s-ms.shape[0]
+
+
 
     return None
