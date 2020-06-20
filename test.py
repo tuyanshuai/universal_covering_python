@@ -15,7 +15,6 @@ hb = compute_greedy_homotopy_basis(face, vertex, bi)
 face_new,vertex_new,father = slice_mesh(face, vertex, hb)
 # show_mesh(face_new, vertex_new)
 z = hyperbolic_embed(face_new,  u[father])
-print(z)
+z = move_mc_to_zero(z)
 
-dump(z.real)
-
+ucs = compute_ucs_h(face_new,vertex_new,z,hb,father)
