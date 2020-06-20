@@ -42,7 +42,7 @@ def segment_pair(bd, father):
             i = i + 1
             j = i
 
-    ms = np.zeros(len(sp))
+    ms = np.zeros(len(sp), dtype=np.intc)
     for i in range(ms.shape[0]):
         si = sp[i]
         for j in range(ms.shape[0]):

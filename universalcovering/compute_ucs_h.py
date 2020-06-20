@@ -34,34 +34,36 @@ def compute_ucs_h(face, vertex, z, hb, father):
             k0 = k0 + nb
         s = 0
         while True:
-            if sp[s].shape[0] == chain[k0].shape[0]:
-                if sp[s] == chain[k0]:
+            if sp[s].shape[0] == len(chain[k0]):
+                if np.all(sp[s] == chain[k0]):
                     break
 
             s = s + 1
-            if s > ms.shape[0]:
+            if s >= ms.shape[0]:
                 s = s - ms.shape[0]
 
         s = s + 1
 
-        if s > ms.shape[0]:
+        if s >= ms.shape[0]:
             s = s - ms.shape[0]
 
-        vio = np.ones(nv, dtype=np.bool)
+        vi0 = np.ones(nv, dtype=np.bool)
+
+
+        #
         while True:
-            if sp[s].shape[0] == chain[k].shape[0]:
-                if sp[s] == chain[k]:
+            if sp[s].shape[0] == len(chain[k]):
+                if np.all(sp[s] == chain[k]):
                     break
-            vi0 = np.zeros(sp[s])
-            vi0[sp[ms[s]][0::-1]] = False
-            vi0[sp[s][0::-1]] = True
+            vi0[sp[ms[s]][:-1]] = False
+            vi0[sp[s][:-1]] = True
             s = s + 1
-            if s > ms.shape[0]:
+            if s >= ms.shape[0]:
                 s = s - ms.shape[0]
 
         s = ms[s]
-        vio[sp[s][0::-1]] = False
-
+        vi0[sp[s][:-1]] = False
+        # TODO: Sec2
         for j in range(1, nb - 1):
             decks = compute_decks_from_chain_h(bp_t, mc)
             z_t = decks[mc[k]][z_t]
@@ -79,9 +81,9 @@ def compute_ucs_h(face, vertex, z, hb, father):
                     if sp[s] == chain[k]:
                         break
 
-                vi[sp[s][0::-1]] = 1 - vi0[sp[s][0::-1]]
-                vi0[sp[s][0::-1]] = True
-                vio[sp[ms[s]]][1::-1] = False
+                vi[sp[s][:-1]] = 1 - vi0[sp[s][:-1]]
+                vi0[sp[s][:-1]] = True
+                vi0[sp[ms[s]]][1::-1] = False
 
                 s = s + 1
                 if s > ms.shape[0]:
