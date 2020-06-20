@@ -1,6 +1,9 @@
 import scipy.sparse as sp
 import numpy as np
 def dump(a):
+    if np.all(np.iscomplex(a)):
+        dump(np.concatenate((a.real,a.imag)))
+
     if sp.issparse(a):
         np.savetxt("var.csv", a.todense(), delimiter=",")
     else:

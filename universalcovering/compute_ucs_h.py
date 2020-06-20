@@ -11,7 +11,7 @@ def compute_ucs_h(face, vertex, z, hb, father):
     chain, mc = compute_bd_chain(bd, bdn, bdc)
     decks = compute_decks_from_chain_h(z, chain, mc)
     bp = compute_bp_from_decks(decks, mc, z[bd[0]])
-    sp, ms = segment_pair(bd, father(bd))
+    sp, ms = segment_pair(bd, father[bd])
 
     nb = bp.shape[0]
     pieces = [list()] * nb
