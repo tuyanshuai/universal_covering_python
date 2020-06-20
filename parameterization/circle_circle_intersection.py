@@ -7,10 +7,10 @@ def circle_circle_intersection(c1, r1, c2, r2):
     dz = c2 - c1
     d = abs(dz)
     a = (r1 * r1 - r2 * r2 + d * d) / d / 2.0
-    z0 = c1 + dz * a // d
+    z0 = c1 + dz * a / d
     h = sqrt(r1 * r1 - a * a)
 
-    rz = 1j * dz * h // d
+    rz = 1j * dz * h / d
     p1 = z0 + rz
     p2 = z0 - rz
     e1 = c2 - c1

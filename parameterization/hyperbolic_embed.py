@@ -10,8 +10,8 @@ def hyper_circle_to_circle(c, r):
     f = (exp(r) - 1.0) / (exp(r) + 1.0)
     f = f * f
     a = 1 - f * d
-    b = 2 * (f - 1.0) * c // a
-    d = (d - f) // a
+    b = 2 * (f - 1.0) * c / a
+    d = (d - f) / a
     c = -b / 2.0
     r = sqrt(abs(b) * abs(b) / 4.0 - d)
     return c, r
@@ -19,7 +19,7 @@ def hyper_circle_to_circle(c, r):
 
 def hyperbolic_embed(face, u):
     nv = u.shape[0]
-    z = np.zeros(nv)
+    z = np.zeros(nv, dtype=np.complex)
     ind = np.zeros(nv, dtype=np.bool)
     indf = np.zeros(face.shape[0], dtype=np.bool)
 
@@ -30,14 +30,14 @@ def hyperbolic_embed(face, u):
         si = np.sum(ind[fi])
         if si == 0 or si == 1:
             raise NameError("ERROR: wrong order of embedding")
-        order = list([0, 1, 2])
+        order = [0, 1, 2]
         if not ind[fi[0]]:
             fi = fi[[1, 2, 0]]
-            order = list([2, 0, 1])
+            order = [2, 0, 1]
         else:
             if not ind[fi[1]]:
                 fi = fi[[2, 0, 1]]
-            order = list([1, 2, 0])
+                order = [1, 2, 0]
         zi = list([0, 0, 0])
         zi[0] = z[fi[0]]
         zi[1] = z[fi[1]]
@@ -52,7 +52,7 @@ def hyperbolic_embed(face, u):
             raise NameError('ERROR: two circles do not intersect, invalid metric')
 
         zi[2] = p
-        zi = zi[order]
+        zi = np.array(zi)[order]
         ind[fi] = True
 
         return zi
@@ -62,17 +62,19 @@ def hyperbolic_embed(face, u):
     r = el(face[0, 0], face[0, 1])
     z[face[0, 1]] = (exp(r) - 1.0) / (exp(r) + 1.0)
     ind[face[0, [0, 1]]] = True
-    queue = list([1])
+    queue = list([0])
     while len(queue) > 0:
         i = queue[0]
         if indf[i]:
-            queue.pop(0)
+            queue = queue[1::]
             continue
         z[face[i, :]] = embed_face(face[i, :])
         indf[i] = True
         f2 = fr[i, :]
         in_ = f2 > 0
         f2 = f2[in_]
-        queue.append(f2)
 
-    return None
+        queue = queue[1::] + (f2-1).tolist()[0]
+
+
+    return z

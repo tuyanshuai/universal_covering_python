@@ -20,8 +20,11 @@ from dbgtool.dbgtool import *
 def compute_face_ring(face):
     _, amd = compute_adjacency_matrix(face)
     fr = amd[face[:, [2, 0, 1]], face[:, [1, 2, 0]]]
+    fr = fr.todense()
     IJ = np.argwhere(fr == 0)
     I = IJ[:,0]
     J = IJ[:,1]
+
+
     fr[I,J] = -1
     return fr
