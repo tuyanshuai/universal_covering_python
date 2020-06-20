@@ -12,4 +12,5 @@ face, vertex = read_off('data/eightsim.off')
 u = hyperbolic_ricci_flow(face, vertex)
 bi = 16
 hb = compute_greedy_homotopy_basis(face, vertex, bi)
-slice_mesh(face, vertex, hb)
+face_new,vertex_new,father = slice_mesh(face, vertex, hb)
+

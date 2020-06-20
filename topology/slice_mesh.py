@@ -44,7 +44,7 @@ def slice_mesh(face, vertex, ee):
 
     face_new = face.copy()
     vertex2 = np.zeros((ee.shape[0] * 2, 3))
-    father2 = np.zeros((ee.shape[0] * 2, 1))
+    father2 = np.zeros((ee.shape[0] * 2))-1
     k = 0
     for i in range(ev.shape[0]):
         evr = vre[i]
@@ -53,9 +53,9 @@ def slice_mesh(face, vertex, ee):
                 break
 
         if evr[0] == evr[-1]:  # interior point
-            evr = evr[i0:-1] + evr[::i0 + 1]
+            evr = evr[i0:-1] + evr[0:i0 + 1]
         else:
-            evr = evr[i0:-1] + evr[::i0]
+            evr = evr[i0:-1] + evr[0:i0]
 
         for j in range(1, len(evr)):
             fi = amd[evr[j], ev[i]] - 1
@@ -70,10 +70,10 @@ def slice_mesh(face, vertex, ee):
 
     vertex_new = np.concatenate((vertex, vertex2), axis=0)
     father = np.array(range(nv))
-    father = np.concatenate((father, father2), axis=0)
+    father = np.concatenate((father, father2))
 
     fu = np.unique(face_new)
-    index = np.zeros((np.max(fu), 1))
+    index = np.zeros(np.max(fu)+1)
     index[fu] = np.array(range(fu.shape[0]))
     face_new = index[face_new]
     vertex_new = vertex_new[fu, :]
