@@ -14,3 +14,4 @@ bi = 16
 hb = compute_greedy_homotopy_basis(face, vertex, bi)
 face_new,vertex_new,father = slice_mesh(face, vertex, hb)
 
+show_mesh(face_new, vertex_new)
