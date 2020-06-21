@@ -18,5 +18,10 @@ z = hyperbolic_embed(face_new,  u[father])
 z = move_mc_to_zero(z)
 
 ucs = compute_ucs_h(face_new,vertex_new,z,hb,father)
+
+print(ucs["z"])
+dump(ucs["z"].real)
+
+dump(ucs["z"].imag)
 # show_mesh(face_new, np.concatenate((z.real[:,None],z.imag[:,None], z.real[:,None]*0),axis=1))
 # plot_mesh(face_new, np.concatenate((z.real[:,None],z.imag[:,None]),axis=1))

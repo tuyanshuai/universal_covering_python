@@ -1,5 +1,5 @@
 import numpy as np
-def hyperbolic_deck_transorm(s1,t1,s2,t2):
+def hyperbolic_deck_transform(s1,t1,s2,t2):
     theta1 = np.angle((t1 - s1) / (1 - np.conj(s1) * t1))
     theta2 = np.angle((t2 - s2) / (1 - np.conj(s2) * t2))
 

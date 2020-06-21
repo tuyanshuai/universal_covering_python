@@ -3,6 +3,7 @@ from universalcovering.compute_bd_chain import *
 from universalcovering.compute_decks_from_chain_h import *
 from universalcovering.compute_bp_from_decks import *
 from universalcovering.segment_pair import *
+from universalcovering.compute_decks_from_bp_h import *
 import numpy as np
 
 
@@ -63,22 +64,22 @@ def compute_ucs_h(face, vertex, z, hb, father):
 
         s = ms[s]
         vi0[sp[s][:-1]] = False
-        # TODO: Sec2
+        # TODO: check Sec2
         for j in range(1, nb - 1):
-            decks = compute_decks_from_chain_h(bp_t, mc)
-            z_t = decks[mc[k]][z_t]
-            bp_t = decks[mc[k]][bp_t]
+            decks = compute_decks_from_bp_h(bp_t, mc)
+            z_t = decks[mc[k]](z_t)
+            bp_t = decks[mc[k]](bp_t)
             ui[j] = z_t
 
             vi = np.ones(nv, dtype=np.bool)
 
             k = mc[k] + 1
-            if k > nb:
+            if k >= nb:
                 k = k - nb
 
             while True:
-                if sp[s].shape[0] == chain[k].shape[0]:
-                    if sp[s] == chain[k]:
+                if sp[s].shape[0] == len(chain[k]):
+                    if np.all(sp[s] == chain[k]):
                         break
 
                 vi[sp[s][:-1]] = 1 - vi0[sp[s][:-1]]
@@ -86,21 +87,20 @@ def compute_ucs_h(face, vertex, z, hb, father):
                 vi0[sp[ms[s]]][1::-1] = False
 
                 s = s + 1
-                if s > ms.shape[0]:
+                if s >= ms.shape[0]:
                     s = s - ms.shape[0]
 
-                s = ms[s]
+            s = ms[s]
+            vi[chain[k]] = False
 
-                vi[chain[k]] = False
-
-                vi0[chain[k][1::-1]] = True
-                vi0[chain[mc[k]]][1::-1] = False
-
-                ui_vi[j] = vi
+            vi0[chain[k][:-1]] = True
+            vi0[chain[mc[k]]][:-1] = False
+            ui_vi[j] = vi
 
         pieces[i] = ui
         ucs_vi[i] = ui_vi
 
+    # Sec3
     vi = np.ones(nv, dtype=np.bool)
     vi[bd] = False
 
@@ -113,14 +113,14 @@ def compute_ucs_h(face, vertex, z, hb, father):
             vi = ui_vi[j]
             ci = ci + np.sum(vi)
 
-    ucs_z = np.zeros((ci, z.shape[1]))
+    ucs_z = np.zeros(ci, np.complex)
     ucs_vertex = np.zeros((ci, vertex.shape[1]))
 
     ci = 0
     vi = np.ones(nv, dtype=np.bool)
     vi[bd] = False
-    ucs_z[ci:ci + np.sum[vi]] = z[vi]
-    ucs_vertex[ci:ci + np.sum[vi], :] = vertex[vi, :]
+    ucs_z[ci:ci + np.sum(vi)] = z[vi]
+    ucs_vertex[ci:ci + np.sum(vi), :] = vertex[vi, :]
     ci = ci + np.sum(vi)
 
     for i in range(nb):
@@ -131,7 +131,7 @@ def compute_ucs_h(face, vertex, z, hb, father):
             uij = ui[j]
             vi = ui_vi[j]
             ucs_z[ci:ci + np.sum(vi)] = uij[vi]
-            ucs_vertex[ci:ci + np.sum[vi], :] = vertex[vi, :]
+            ucs_vertex[ci:ci + np.sum(vi), :] = vertex[vi, :]
             ci = ci + np.sum(vi)
 
     ucs = {"pieces": pieces,
