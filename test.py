@@ -6,7 +6,7 @@ from topology import *
 from universalcovering import *
 from dbgtool.dbgtool import *
 
-face, vertex = read_off('data/eightsim.off')
+face, vertex = read_off('data/eight.off')
 
 # show_mesh(face, vertex)
 u = hyperbolic_ricci_flow(face, vertex)
@@ -17,11 +17,8 @@ face_new,vertex_new,father = slice_mesh(face, vertex, hb)
 z = hyperbolic_embed(face_new,  u[father])
 z = move_mc_to_zero(z)
 
-ucs = compute_ucs_h(face_new,vertex_new,z,hb,father)
+# ucs = compute_ucs_h(face_new,vertex_new,z,hb,father)
 
-print(ucs["z"])
-dump(ucs["z"].real)
-
-dump(ucs["z"].imag)
-# show_mesh(face_new, np.concatenate((z.real[:,None],z.imag[:,None], z.real[:,None]*0),axis=1))
+show_mesh(face_new, np.concatenate((z.real[:,None],z.imag[:,None], z.real[:,None]*0),axis=1))
 # plot_mesh(face_new, np.concatenate((z.real[:,None],z.imag[:,None]),axis=1))
+
