@@ -21,7 +21,9 @@ from algebra.laplacian_beltrami import *
 from algebra.computer_bc import *
 from algebra.linear_beltrami_solver import *
 import scipy.sparse as sp
+from dbgtool.dbgtool import *
 
+# TODO: Check the function and compute_bc and face_area
 
 def spherical_conformal_map(face, vertex):
     dv1 = vertex[face[:, 1], :] - vertex[face[:, 2], :]
@@ -41,14 +43,15 @@ def spherical_conformal_map(face, vertex):
     nv = vertex.shape[0]
     A = laplace_beltrami(face, vertex)
     fi = face[bi, :]
-    IJ = np.argwhere(A[fi, :])
+    Afi = A[fi, :]
+    IJ = np.argwhere(Afi)
     I = IJ[:, 0]
     J = IJ[:, 1]
-    V = A[IJ]
+    V = Afi[I, J]
 
     # A = A - sparse(fi(I), J, V, nv, nv) + sparse(fi, fi, [1, 1, 1], nv, nv);
-    A = A - sp.csr_matrix((V, (fi[I], J)), shape=(nv, nv)) + sp.csr_matrix((np.array([1, 1, 1]), (fi, fi)),
-                                                                           shape=(nv, nv))
+    A = A - sp.csr_matrix((V.toarray()[0], (fi[I], J)), shape=(nv, nv)) + sp.csr_matrix((np.array([1, 1, 1]), (fi, fi)),
+                                                                                        shape=(nv, nv))
 
     # Set boundary condition for big triangle
     x1 = 0.0
@@ -60,24 +63,24 @@ def spherical_conformal_map(face, vertex):
     b = vertex[fi[2], :] - vertex[fi[0], :]
 
     ratio = np.linalg.norm([x1 - x2, y1 - y2]) / np.linalg.norm(a)
-    y3 = norm([x1 - x2, y1 - y2]) * np.linalg.norm(np.cross(a, b)) / np.linalg.norm(a) ^ 2
-    x3 = np.sqrt(np.linalg.norm(b) ^ 2 * ratio ^ 2 - y3 ^ 2)
+    y3 = np.linalg.norm(list([x1 - x2, y1 - y2])) * np.linalg.norm(np.cross(a, b)) / np.power(np.linalg.norm(a), 2)
+    x3 = np.sqrt(np.power(np.linalg.norm(b), 2) * ratio * ratio - np.power(y3, 2))
 
     # Solve matrix equation
-    d = np.zeros(nv, dtype=np.complex)
-    d[fi] = np.concatenate((x1 + 1j * y1, x2 + 1j * y2, x3 + 1j * y3))
-
-    z = np.linalg.solve(A, d)
     d = np.zeros((nv, 2))
-    d[fi, :] = np.concatenate(
-        (np.concatenate((x1, y1), axis=1), np.concatenate((x2, y2), axis=1), np.concatenate((x3, y3), axis=1)))
-    uv = np.linalg.solve(A, d)
+    d[fi[0], :] = (x1,y1)
+    d[fi[1], :] = (x2, y2)
+    d[fi[2], :] = (x3, y3)
+
+    uv = sp.linalg.spsolve(A, d)
     z = uv[:, 0] + 1j * uv[:, 1]
     z = z - np.mean(z)
     dz2 = np.power(np.abs(z), 2)
 
-    vertex_new = np.concatenate((2 * np.real(z) / (1.0 + dz2), 2 * np.imag(z) / (1.0 + dz2), (-1.0 + dz2) / (1 + dz2)),
-                                axis=1)
+    vertex_new = np.zeros((nv, 3))
+    vertex_new[:, 0] = 2 * np.real(z) / (1.0 + dz2)
+    vertex_new[:, 1] = 2 * np.imag(z) / (1.0 + dz2)
+    vertex_new[:, 2] = (-1.0 + dz2) / (1 + dz2)
 
     # Find optimal big triangle size
     # Reason: the distribution will be the best

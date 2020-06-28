@@ -7,3 +7,4 @@ from algebra.compute_vertex_ring import *
 from algebra.compute_dual_graph import *
 from algebra.compute_face_ring import *
 from algebra.compute_bc import *
+from algebra.face_area import *
