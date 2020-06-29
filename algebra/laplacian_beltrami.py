@@ -39,9 +39,8 @@ def laplace_beltrami(face,vertex):
 
     A = sparse.coo_matrix((V.flatten(), (I.flatten(), J.flatten())))
     A = A.tolil()
-
-    sA = np.sum(A, axis=1)
-    for i in range(A.shape[0]):
-        A[i,i] -= sA[i,0]
+    sA = np.sum(A, axis=0)
+    i =range(A.shape[0])
+    A[i,i] = A[i,i] - sA
     return A
 

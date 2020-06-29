@@ -16,12 +16,13 @@
 #   mu = compute_bc(face,uv,vertex)
 #
 from algebra.face_area import *
-
+import numpy as np
 
 def compute_bc(face, uv, vertex):
     nf = face.shape[0]
     fa = face_area(face, uv)
-    Duv = uv[face[:, [2, 0, 1]], :] - uv[face[:, [1, 2, 0]], :]
+    Duv = np.concatenate((uv[face[:, 2], :] - uv[face[:, 1], :], uv[face[:, 0], :] - uv[face[:, 2], :],
+                          uv[face[:, 1], :] - uv[face[:, 0], :]))
     Duv[:, 0] = Duv[:, 0] / np.concatenate((fa, fa, fa)) / 2.0
     Duv[:, 1] = Duv[:, 1] / np.concatenate((fa, fa, fa)) / 2.0
 
@@ -30,25 +31,26 @@ def compute_bc(face, uv, vertex):
         z = np.zeros(nv, np.complex)
         z.real = vertex[:, 0]
         z.imag = vertex[:, 1]
-
-        Dcz = np.sum(reshape((Duv[:, 1] - 1j * Duv[:, 0]) * z[face, :], (nf, 3)), axis=1)
-        Dzz = np.sum(reshape((Duv[:, 1] + 1j * Duv[:, 0]) * z[face, :], (nf, 3)), axis=1)
+        flatface = np.concatenate((face[:, 0], face[:, 1], face[:, 2]))
+        Dcz = np.sum(reshape((Duv[:, 1] - 1j * Duv[:, 0]) * z[flatface], (nf, 3), order='F'), axis=1)
+        Dzz = np.sum(reshape((Duv[:, 1] + 1j * Duv[:, 0]) * z[flatface], (nf, 3), order='F'), axis=1)
         mu = Dcz / Dzz
 
     if vertex.shape[1] == 3:
         du = np.zeros((nf, 3))
-        du[:, 0] = np.sum(reshape(Duv[:, 1] * vertex[face, 0], (nf, 3)), axis=1)
-        du[:, 1] = np.sum(reshape(Duv[:, 1] * vertex[face, 1], (nf, 3)), axis=1)
-        du[:, 2] = np.sum(reshape(Duv[:, 1] * vertex[face, 2], (nf, 3)), axis=1)
+        flatface = np.concatenate((face[:, 0], face[:, 1], face[:, 2]))
+        du[:, 0] = np.sum(reshape(Duv[:, 1] * vertex[flatface, 0], (nf, 3), order='F'), axis=1)
+        du[:, 1] = np.sum(reshape(Duv[:, 1] * vertex[flatface, 1], (nf, 3), order='F'), axis=1)
+        du[:, 2] = np.sum(reshape(Duv[:, 1] * vertex[flatface, 2], (nf, 3), order='F'), axis=1)
         dv = np.zeros((nf, 3))
-        dv[:, 0] = np.sum(reshape(Duv[:, 0] * vertex[face, 0], (nf, 3)), axis=1)
-        dv[:, 1] = np.sum(reshape(Duv[:, 0] * vertex[face, 1], (nf, 3)), axis=1)
-        dv[:, 2] = np.sum(reshape(Duv[:, 0] * vertex[face, 2], (nf, 3)), axis=1)
+        dv[:, 0] = np.sum(reshape(Duv[:, 0] * vertex[flatface, 0], (nf, 3), order='F'), axis=1)
+        dv[:, 1] = np.sum(reshape(Duv[:, 0] * vertex[flatface, 1], (nf, 3), order='F'), axis=1)
+        dv[:, 2] = np.sum(reshape(Duv[:, 0] * vertex[flatface, 2], (nf, 3), order='F'), axis=1)
 
         E = np.sum(du * du, axis=1)
         G = np.sum(dv * dv, axis=1)
         F = -np.sum(du * dv, axis=1)
-        mu = (E - G + 2j * F) / (E + G + 2 * np.sqrt(E * G - F ^ 2))
+        mu = (E - G + 2j * F) / (E + G + 2 * np.sqrt(E * G - np.power(F,2)))
 
     if vertex.shape[1] != 2 and vertex.shape[1] != 3:
         raise NameError('Dimension of target mesh must be 3 or 2.')

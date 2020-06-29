@@ -8,3 +8,5 @@ from algebra.compute_dual_graph import *
 from algebra.compute_face_ring import *
 from algebra.compute_bc import *
 from algebra.face_area import *
+from algebra.linear_beltrami_solver import *
+from algebra.generalized_laplacian import *

@@ -1,5 +1,6 @@
 import scipy.sparse as sp
 import numpy as np
+import time
 def dump(a):
     if sp.issparse(a):
         np.savetxt("var.csv", a.todense(), delimiter=",")
@@ -15,3 +16,17 @@ def dump_sparse(a):
                 fp.write("(%d,%d) = %f\n" %(i+1,j+1, a[i,j]))
 
     fp.close()
+
+
+t =0
+def tic():
+    global t
+    t = time.time()
+    return None
+
+def toc():
+    # do stuff
+    global t
+    elapsed = time.time() - t
+    print("It ellpased %f(s)" % elapsed)
+    return elapsed

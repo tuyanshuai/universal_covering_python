@@ -15,15 +15,18 @@ Description
   vertex: double array, nv x 3, vertex of mesh
 
   uvw: double array, nv x 3, spherical uvw coordinates of vertex on 3D unit sphere
+
+
+Init the checking by yanshuai 06/28/2020
 """
 import numpy as np
 from algebra.laplacian_beltrami import *
-from algebra.computer_bc import *
+from algebra.compute_bc import *
 from algebra.linear_beltrami_solver import *
 import scipy.sparse as sp
 from dbgtool.dbgtool import *
 
-# TODO: Check the function and compute_bc and face_area
+
 
 def spherical_conformal_map(face, vertex):
     dv1 = vertex[face[:, 1], :] - vertex[face[:, 2], :]
@@ -68,7 +71,7 @@ def spherical_conformal_map(face, vertex):
 
     # Solve matrix equation
     d = np.zeros((nv, 2))
-    d[fi[0], :] = (x1,y1)
+    d[fi[0], :] = (x1, y1)
     d[fi[1], :] = (x2, y2)
     d[fi[2], :] = (x3, y3)
 
@@ -85,7 +88,7 @@ def spherical_conformal_map(face, vertex):
     # Find optimal big triangle size
     # Reason: the distribution will be the best
     # if the southmost triangle has similar size of the northmost one
-    w = np.zeros(nv, 2)
+    w = np.zeros(nv, np.complex)
     w.real = vertex_new[:, 0] / (1.0 + vertex_new[:, 2])
     w.imag = vertex_new[:, 1] / (1.0 + vertex_new[:, 2])
 
@@ -96,23 +99,27 @@ def spherical_conformal_map(face, vertex):
 
     ss = np.sum(abs(w[face[ni, [0, 1, 2]]] - w[face[ni, [1, 2, 0]]])) / 3
     z = z * (np.sqrt(ns * ss)) / ns
-    dz2 = np.abs(z) ^ 2
+    dz2 = np.power(np.abs(z), 2)
 
-    vertex_new = np.concatenate((2 * np.real(z) / (1.0 + dz2), 2 * np.imag(z) / (1.0 + dz2), (-1.0 + dz2) / (1 + dz2)),
-                                axis=1)
+    vertex_new[:, 0] = 2 * np.real(z) / (1.0 + dz2)
+    vertex_new[:, 1] = 2 * np.imag(z) / (1.0 + dz2)
+    vertex_new[:, 2] = (-1.0 + dz2) / (1 + dz2)
 
     # south pole stereographic projection
-    uv = np.concatenate((vertex_new[:, 0] / (1.0 + vertex_new[:, 2]), vertex_new[:, 1] / (1.0 + vertex_new[:, 2])),
-                        axis=1)
+    uv[:, 0] = vertex_new[:, 0] / (1.0 + vertex_new[:, 2])
+    uv[:, 1] = vertex_new[:, 1] / (1.0 + vertex_new[:, 2])
     mu = compute_bc(face, uv, vertex)
 
     # find the south pole
     ind = np.argsort(vertex_new[:, 2])
-    fixed = ind[0:np.min(nv, 50)]
+    fixed = ind[0:min([nv, 50])]
     # reconstruct map with given mu and some fixed point
     fuv, fmu = linear_beltrami_solver(face, uv, mu, fixed, uv[fixed, :])
 
     dfz2 = fuv[:, 0] * fuv[:, 0] + fuv[:, 1] * fuv[:, 1]
-    uvw = np.concatenate((2 * fuv[:, 0] / (1.0 + dfz2), 2 * fuv[:, 1] / (1.0 + dfz2), -(-1 + dfz2) / (1 + dfz2)),
-                         axis=1)
+
+    uvw = np.zeros((nv, 3))
+    uvw[:, 0] = 2 * fuv[:, 0] / (1.0 + dfz2)
+    uvw[:, 1] = 2 * fuv[:, 1] / (1.0 + dfz2)
+    uvw[:, 2] = -(-1 + dfz2) / (1 + dfz2)
     return uvw
