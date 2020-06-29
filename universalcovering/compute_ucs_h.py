@@ -20,8 +20,8 @@ def compute_ucs_h(face, vertex, z, hb, father):
     nv = z.shape[0]
     # TODO: Need check again
     for i in range(nb):
-        z_t = z
-        bp_t = bp
+        z_t = np.array(z)
+        bp_t = np.array(bp)
         ui = [list()] * (nb - 1)
         ui_vi = [list()] * (nb - 1)
         ui[0] = z_t
@@ -84,7 +84,7 @@ def compute_ucs_h(face, vertex, z, hb, father):
 
                 vi[sp[s][:-1]] = 1 - vi0[sp[s][:-1]]
                 vi0[sp[s][:-1]] = True
-                vi0[sp[ms[s]]][1::-1] = False
+                vi0[sp[ms[s]][:-1]] = False
 
                 s = s + 1
                 if s >= ms.shape[0]:
@@ -92,9 +92,8 @@ def compute_ucs_h(face, vertex, z, hb, father):
 
             s = ms[s]
             vi[chain[k]] = False
-
             vi0[chain[k][:-1]] = True
-            vi0[chain[mc[k]]][:-1] = False
+            vi0[chain[mc[k]][:-1]] = False
             ui_vi[j] = vi
 
 
@@ -113,7 +112,7 @@ def compute_ucs_h(face, vertex, z, hb, father):
         for j in range(1, nb - 1):
             vi = ui_vi[j]
             ci = ci + np.sum(vi)
-            print(ci)
+
 
     ucs_z = np.zeros(ci, np.complex)
     ucs_vertex = np.zeros((ci, vertex.shape[1]))

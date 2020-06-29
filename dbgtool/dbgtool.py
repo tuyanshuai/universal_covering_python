@@ -1,11 +1,35 @@
 import scipy.sparse as sp
 import numpy as np
 import time
+
+# dump a simple real matrix
+def simdump(fn, a):
+    np.savetxt(fn, a, delimiter=",")
+
 def dump(a):
-    if sp.issparse(a):
-        np.savetxt("var.csv", a.todense(), delimiter=",")
+
+    if type(a)==list:
+        if len(a[0]) > 1:  # array of array
+            for i in range(len(a)):
+                if np.any(np.iscomplex(a[0])):
+                    fn = "%d_real.csv" % (i+1)
+                    simdump(fn, np.real(a[i]))
+                    fn = "%d_imag.csv" % (i+1)
+                    simdump(fn, np.imag(a[i]))
+                else:
+                    fn = "%d.csv" % (i+1)
+                    simdump(fn, a[i])
+        else:
+            simdump("var.csv", a)  # ordinary array
     else:
-        np.savetxt("var.csv", a, delimiter=",")
+        if sp.issparse(a):
+            simdump("var.csv", a.todense())
+        else:
+            if np.any(np.iscomplex(a)):
+                simdump("real.csv", a.real)
+                simdump("imag.csv", a.imag)
+            else:
+                simdump("var.csv", a)  # ordinary array
 
 
 def dump_sparse(a):
@@ -25,7 +49,6 @@ def tic():
     return None
 
 def toc():
-    # do stuff
     global t
     elapsed = time.time() - t
     print("It ellpased %f(s)" % elapsed)
