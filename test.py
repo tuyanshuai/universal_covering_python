@@ -17,7 +17,7 @@ toc()
 
 # plot_mesh(F, uvw)
 
-show_mesh(F, uvw)
+show_mesh(F, uvw, V)
 #
 #
 #

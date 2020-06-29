@@ -5,12 +5,6 @@ import numpy as np
 import numpy_groupies as npg
 import scipy.sparse as sp
 
-def dump(a):
-    if sp.issparse(a):
-        np.savetxt("var.csv", a.todense(), delimiter=",")
-    else:
-        np.savetxt("var.csv", a, delimiter=",")
-
 def hyperbolic_ricci_flow(face,vertex):
     edge, eif = compute_edge(face)
     bd = compute_bd(face)
