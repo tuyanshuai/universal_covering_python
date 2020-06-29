@@ -3,11 +3,11 @@ from universalcovering.compute_bd_chain import *
 from universalcovering.compute_decks_from_chain_h import *
 from universalcovering.compute_bp_from_decks import *
 from universalcovering.segment_pair import *
-from universalcovering.compute_decks_from_bp_h import *
+from universalcovering.compute_decks_from_bp import *
 import numpy as np
 
 
-def compute_ucs_h(face, vertex, z, hb, father):
+def compute_ucs(face, vertex, z, hb, father):
     bd, bdn, bdc = bd_multiplicity(face, z, hb, father)
     chain, mc = compute_bd_chain(bd, bdn, bdc)
     decks = compute_decks_from_chain_h(z, chain, mc)
@@ -66,7 +66,7 @@ def compute_ucs_h(face, vertex, z, hb, father):
         vi0[sp[s][:-1]] = False
 
         for j in range(1, nb - 1):
-            decks = compute_decks_from_bp_h(bp_t, mc)
+            decks = compute_decks_from_bp(bp_t, mc)
             z_t = decks[mc[k]](z_t)
             bp_t = decks[mc[k]](bp_t)
             ui[j] = z_t

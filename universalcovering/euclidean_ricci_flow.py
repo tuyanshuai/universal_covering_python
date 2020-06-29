@@ -66,7 +66,7 @@ def euclidean_ricci_flow( face, vertex):
 
     def calculate_metric():
 
-        u = np.ones(shape=(nv, 1)) * np.log(np.tanh(0.5))
+        u = np.zeros(shape=(nv, 1))
         vtk = set_target_curvature()
 
         while True:

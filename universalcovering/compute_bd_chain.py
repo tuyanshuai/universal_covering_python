@@ -7,25 +7,25 @@ def compute_bd_chain(bd,bdn,bdc):
     chain = [list()]*ns
 
     s = 0
-    k = 1
+    k = 0
     mc = np.zeros(ns, dtype=np.intc)
     c = np.zeros(ns, dtype=np.intc)
 
-    while k< nb:
+    while k < nb:
         i = k
         while i<= nb and bdn[i] != 1:
             i = i +1
 
-        if i >nb:
+        if i >= nb:
             break
 
         j = i
 
-        while j <= nb and bdn[j] ==1:
+        while j < nb and bdn[j] ==1:
             j = j+1
 
         jn = j
-        if jn > nb:
+        if jn >= nb:
             jn = jn -nb
 
         c[s] = bdc[i]
