@@ -11,8 +11,9 @@
 
 
 ### Step 2: Get the canonical coordinate for the convolution on the Poincare disk
+There is a X-Y coordinate for the poincare disk, so that the poincare disk can be one to one map to the euclidean coordinate
+The illustrative figure is
 
-The illustrative figure
 ![Image of mesh along fundamental group](screenshots/fig4.jpg)
 
 ### Step 3: Convolution along the canonical coordinates
