@@ -1,4 +1,4 @@
-# Canonical Coordinate System for Geometry Learn
+# Canonical Coordinate System for Geometry Learning
 ## Introduction
 - It is not handy to apply CNN on graph convolution because no grid system
 - This project provide such grid system on the parametrization

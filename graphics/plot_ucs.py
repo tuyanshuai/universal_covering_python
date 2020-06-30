@@ -9,7 +9,7 @@ from mpl_toolkits.mplot3d import axes3d, Axes3D  # <-- Note the capitalization!
 from algebra import *
 
 
-def colorpool(i, j):
+def colorpool(i,j):
     r = (0.8, 0.2, 0.2)
     g = (0.2, 0.8, 0.2)
     b = (0.2, 0.2, 0.8)
@@ -19,8 +19,8 @@ def colorpool(i, j):
     s = (0.6, 0.6, 0.6)
     p = (1, 0.6, 0.8)
 
-    cl = list([s, r, g, b, y, c, m])
-    ci = (i + j) % 7
+    cl = list([s, r, g, b, y, c, m, p])
+    ci = ( (i + j)*i+j) % 7
     return cl[ci]
 
 
