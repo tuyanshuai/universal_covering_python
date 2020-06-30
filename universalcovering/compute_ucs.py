@@ -138,5 +138,6 @@ def compute_ucs(face, vertex, z, hb, father):
     ucs = {"pieces": pieces,
            "z": ucs_z,
            "vertex": ucs_vertex,
-           "bp": bp}
+           "bp": bp,
+           "metric": "euclidean"}
     return ucs

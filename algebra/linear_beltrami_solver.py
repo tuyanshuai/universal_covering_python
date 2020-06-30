@@ -32,15 +32,15 @@ import scipy.sparse as sp
 import numpy as np
 from dbgtool.dbgtool import *
 
-def linear_beltrami_solver(face,uv,mu,landmark, target):
 
+def linear_beltrami_solver(face, uv, mu, landmark, target):
     A = generalized_laplacian(face, uv, mu)
-    b = -A[:, landmark]*target
-    b[landmark,:] = target
-    A[landmark,:] = 0
+    b = -A[:, landmark] * target
+    b[landmark, :] = target
+    A[landmark, :] = 0
     A[:, landmark] = 0
 
-    A = A + sp.csr_matrix( (np.ones(landmark.shape[0]),(landmark, landmark)), shape=A.shape)
-    uv_new = sp.linalg.spsolve(A,b)
+    A = A + sp.csr_matrix((np.ones(landmark.shape[0]), (landmark, landmark)), shape=A.shape)
+    uv_new = sp.linalg.spsolve(A, b)
     mu_new = compute_bc(face, uv, uv_new)
-    return uv_new,mu_new
+    return uv_new, mu_new
