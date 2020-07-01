@@ -17,14 +17,16 @@
 #
 from algebra.face_area import *
 import numpy as np
-
+from dbgtool.dbgtool import *
 def compute_bc(face, uv, vertex):
     nf = face.shape[0]
     fa = face_area(face, uv)
     Duv = np.concatenate((uv[face[:, 2], :] - uv[face[:, 1], :], uv[face[:, 0], :] - uv[face[:, 2], :],
                           uv[face[:, 1], :] - uv[face[:, 0], :]))
-    Duv[:, 0] = Duv[:, 0] / np.concatenate((fa, fa, fa)) / 2.0
-    Duv[:, 1] = Duv[:, 1] / np.concatenate((fa, fa, fa)) / 2.0
+    fafafa = np.concatenate((fa, fa, fa))
+    Duv[:, 0] = Duv[:, 0] / fafafa / 2.0
+    Duv[:, 1] = Duv[:, 1] / fafafa / 2.0
+
 
     if vertex.shape[1] == 2:
         nv = vertex.shape[0]

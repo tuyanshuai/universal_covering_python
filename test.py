@@ -6,32 +6,27 @@ from topology import *
 from universalcovering import *
 from dbgtool.dbgtool import *
 
+
+
+F, V = read_off('data/faceg0.off')
+uv = disk_conformal_map(F, V)
+# dump(uv)
+# mu = compute_bc(F, uv, V)
+# hist(np.abs(mu))
 #
-# F, V = read_off('data/face.off')
-#
-# uv = disk_harmonic_map(F, V)
+# F, V = read_off('data/bunny.off')
+# uvw = spherical_conformal_map(F, V)
+# dump(uvw)
+
 #
 # #
-# uv = disk_harmonic_map(F, V)
-# mu = compute_bc(F, uv, V)
+# F, V = read_off('data/maxplanck.nf25k.off')
+# tic()
+# uvw = spherical_conformal_map(F, V)
+# toc()
+# mu = compute_bc(F, uvw, V)
 #
-#
-# uv = disk_conformal_map(F, V)
-#
-# mu2 = compute_bc(F, uv, V)
 # hist(np.abs(mu))
-# hist(np.abs(mu2))
-
-
-
-#
-F, V = read_off('data/maxplanck.nf25k.off')
-tic()
-uvw = spherical_conformal_map(F, V)
-toc()
-mu = compute_bc(F, uvw, F)
-
-hist(np.abs(mu))
 # plot_mesh(F, uvw)
 #
 # show_mesh(F, uvw, V)

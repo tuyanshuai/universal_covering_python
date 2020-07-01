@@ -4,7 +4,7 @@ import time
 
 # dump a simple real matrix
 def simdump(fn, a):
-    np.savetxt(fn, a, delimiter=",")
+    np.savetxt(fn, a, delimiter=",",fmt='%60.60f')
 
 def dump(a):
 

@@ -27,7 +27,7 @@ import scipy.sparse as sp
 from dbgtool.dbgtool import *
 
 
-
+# TODO: this is not right
 def spherical_conformal_map(face, vertex):
     dv1 = vertex[face[:, 1], :] - vertex[face[:, 2], :]
     e1 = np.linalg.norm(dv1, axis=1)

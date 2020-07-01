@@ -19,7 +19,7 @@ def find_next_point(faces, eg):
     return None
 
 
-def compute_vertex_ring(face, vertex, vc=np.array([]), ordered=None):
+def compute_vertex_ring(face, vertex=np.array([]), vc=np.array([]), ordered=None):
     nv = np.max(np.max(face)) + 1
     if vc.size == 0:
         vc = np.array(range(nv))
