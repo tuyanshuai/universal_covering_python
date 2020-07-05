@@ -68,16 +68,11 @@ def farthest_point_sampling(off_file, num_samples=1000):
     return np.array(set_S)
 
 
-def write(fname, pts):
+def writepts(fname, pts):
     with open(fname, 'w') as f:
         f.writelines(','.join(str(xyz) for xyz in pt) + '\n' for pt in pts)
 
 
 def mesh2pts(meshfn, outfn):
-    sample_pts = farthest_point_sampling(meshfn)
-    write(outfn, sample_pts)
-
-# main
-if __name__ == "__main__":
-    sample_pts = farthest_point_sampling(sys.argv[1])
-    write(sys.argv[2], sample_pts)
+    sample_pts = farthest_point_sampling(meshfn, 100000)
+    writepts(outfn, sample_pts)
