@@ -2,7 +2,7 @@
 import numpy as np
 
 
-def write_mfile(fn, F, V, C=np.zeros(0)):
+def write_mfile(fn, F, V, C=np.zeros(0) ):
     with open(fn, 'w') as f:
         for i in range(V.shape[0]):
             if C.shape[0] == 0:

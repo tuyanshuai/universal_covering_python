@@ -1,10 +1,3 @@
-from parameterization.disk_harmonic_map import *
-from algebra.compute_bc import *
-from algebra.compute_bd import *
-from algebra.linear_beltrami_solver import *
-from algebra.compute_vertex_face_ring import *
-import numpy as np
-
 """
 % Compute the disk conformal mapping using the method in [1].
 %
@@ -27,8 +20,12 @@ import numpy as np
 %     Journal of Scientific Computing, 65(3), pp. 1065-1090, 2015.
 """
 
+from parameterization.disk_harmonic_map import *
+from algebra.compute_bc import *
+from algebra.compute_bd import *
+from algebra.linear_beltrami_solver import *
+from algebra.compute_vertex_face_ring import *
 import numpy as np
-
 
 def f2v(face, vertex, mu):
     vr = compute_vertex_ring(face)
@@ -75,8 +72,8 @@ def disk_conformal_map(face, vertex):
     fixed = np.concatenate((fixed1, fixed2, fixed3))
 
     # TODO : MATLAB 47-48 Line
-    P = [real(g),imag(g),ones(length(g),1)];
-    mu = beltrami_coefficient(P, face, vertex);
+    # P = [real(g),imag(g),ones(length(g),1)];
+    # mu = beltrami_coefficient(P, face, vertex);
 
 #
 # def disk_conformal_map(face, vertex):

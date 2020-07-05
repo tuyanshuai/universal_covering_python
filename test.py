@@ -7,9 +7,9 @@ from universalcovering import *
 from dbgtool.dbgtool import *
 
 
-
-F, V = read_off('data/faceg0.off')
-uv = disk_conformal_map(F, V)
+#
+# F, V = read_off('data/faceg0.off')
+# uv = disk_conformal_map(F, V)
 # dump(uv)
 # mu = compute_bc(F, uv, V)
 # hist(np.abs(mu))
@@ -51,12 +51,15 @@ uv = disk_conformal_map(F, V)
 # plot_ucs(face_new, ucs["pieces"])
 #
 #
-# face, vertex = read_off('data/torus.off')
-#
-# u = euclidean_ricci_flow(face, vertex)
-# bi = 200
-# hb = compute_greedy_homotopy_basis(face, vertex, bi)
-# face_new, vertex_new, father = slice_mesh(face, vertex, hb)
-# z = euclidean_embed(face_new, u[father])
-# ucs = compute_ucs(face_new, vertex_new, z, hb, father)
-# plot_ucs(face_new, ucs["pieces"])
+face, vertex = read_off('data/torus.off')
+
+u = euclidean_ricci_flow(face, vertex)
+bi = 0
+hb = compute_greedy_homotopy_basis(face, vertex, bi)
+face_new, vertex_new, father = slice_mesh(face, vertex, hb)
+
+show_mesh(face_new, vertex_new)
+
+z = euclidean_embed(face_new, u[father])
+ucs = compute_ucs(face_new, vertex_new, z, hb, father)
+plot_ucs(face_new, ucs["pieces"])
