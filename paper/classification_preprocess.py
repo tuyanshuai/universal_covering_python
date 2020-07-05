@@ -9,11 +9,11 @@ def OFFtoPLY(path, categories, DataGroup):
     for cat in categories:
         DataArray = []
         # deal with train first
-        files = os.listdir(path + cat + '\\' + DataGroup + '\\')
+        files = os.listdir(path + cat + '/' + DataGroup + '/')
         files = [x for x in files if x[-4:] == '.off']
         for file_index, file in enumerate(files):
             fileName = file.split('.')[0]
-            with open(path + cat + '\\' + DataGroup + '\\' + file, 'r') as f:
+            with open(path + cat + '/' + DataGroup + '/' + file, 'r') as f:
                 tmp = f.readline().replace('\n', '')
                 line = ''
                 if tmp != 'OFF':
@@ -41,7 +41,7 @@ def OFFtoPLY(path, categories, DataGroup):
                 data = data / m
 
                 # create ply file,write in header first.
-                with open(path + cat + '\\' + DataGroup + '\\' + fileName + ".ply", 'w') as plyFile:
+                with open(path + cat + '/' + DataGroup + '/' + fileName + ".ply", 'w') as plyFile:
                     plyFile.write('ply\nformat ascii 1.0\nelement vertex ')
                     plyFile.write(point_count)
                     plyFile.write('\nproperty float32 x\nproperty float32 y\nproperty float32 z\nelement face ')
@@ -61,12 +61,12 @@ def PLYtoPCD(path, categories, DataGroup):
     for cat in categories:
         DataArray = []
         # deal with train first
-        files = os.listdir(path + cat + '\\' + DataGroup + '\\')
+        files = os.listdir(path + cat + '/' + DataGroup + '/')
         files = [x for x in files if x[-4:] == '.ply']
         for file_index, file in enumerate(files):
             fileName = file.split('.')[0]
-            subprocess.call(['pcl_mesh_sampling', path + cat + '\\' + DataGroup + '\\' + file,
-                             path + cat + '\\' + DataGroup + '\\' + fileName + ".pcd", '-no_vis_result', '-n_samples',
+            subprocess.call(['pcl_mesh_sampling', path + cat + '/' + DataGroup + '/' + file,
+                             path + cat + '/' + DataGroup + '/' + fileName + ".pcd", '-no_vis_result', '-n_samples',
                              '2200', '-leaf_size', '0.01'])
 
 
