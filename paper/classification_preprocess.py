@@ -2,7 +2,7 @@ import numpy as np
 import os
 
 categories = ['bathtub', 'bed', 'chair', 'desk', 'dresser', 'monitor', 'night_stand', 'sofa', 'table', 'toilet']
-path = '/home/local/ASUAD/yanshuai/shapeAI/Data/yanshuai/ModelNet10'
+path = '/home/local/ASUAD/yanshuai/shapeAI/Data/yanshuai/ModelNet10/'
 
 
 def OFFtoPLY(path, categories, DataGroup):
