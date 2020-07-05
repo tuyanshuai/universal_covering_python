@@ -1,9 +1,5 @@
-from preprocess import *
 import numpy as np
-import pandas as pd
-import h5py
 import os
-from sklearn import preprocessing
 
 categories = ['bathtub', 'bed', 'chair', 'desk', 'dresser', 'monitor', 'night_stand', 'sofa', 'table', 'toilet']
 path = '/home/local/ASUAD/yanshuai/shapeAI/Data/yanshuai/ModelNet10'
