@@ -85,8 +85,8 @@ if __name__ == "__main__":
     # OFFtoPLY(path, categories, 'train')
     # OFFtoPLY(path, categories, 'test')
     #
-    # PLYtoPCD(path, categories, 'train')
-    # PLYtoPCD(path, categories, 'test')
+    PLYtoPCD(path, categories, 'train')
+    PLYtoPCD(path, categories, 'test')
 
-    delPCDHeader(path, categories, 'test')
-    delPCDHeader(path, categories, 'test')
+    # delPCDHeader(path, categories, 'test')
+    # delPCDHeader(path, categories, 'test')
