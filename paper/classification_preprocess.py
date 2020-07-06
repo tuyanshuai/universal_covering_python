@@ -77,7 +77,7 @@ def delPCDHeader(path, categories, DataGroup):
         for file_index, file in enumerate(files):
             with open(path + cat + '/' + DataGroup + '/' + file, 'r') as f:
                 data = f.read().splitlines(True)
-            with open(path + cat + '/' + DataGroup + '/' + file, 'w') as f:
+            with open(path + cat + '/' + DataGroup + '/nh' + file, 'w') as f:
                 f.writelines(data[9:])
 
 
@@ -88,5 +88,5 @@ if __name__ == "__main__":
     PLYtoPCD(path, categories, 'train')
     PLYtoPCD(path, categories, 'test')
 
-    # delPCDHeader(path, categories, 'test')
-    # delPCDHeader(path, categories, 'test')
+    delPCDHeader(path, categories, 'test')
+    delPCDHeader(path, categories, 'test')
