@@ -67,7 +67,7 @@ def PLYtoPCD(path, categories, DataGroup):
             fileName = file.split('.')[0]
             subprocess.call(['pcl_mesh_sampling', path + cat + '/' + DataGroup + '/' + file,
                              path + cat + '/' + DataGroup + '/' + fileName + ".pcd", '-no_vis_result', '-n_samples',
-                             '80000', '-leaf_size', '0.01'])
+                             '200000', '-leaf_size', '0.01'])
 
 
 if __name__ == "__main__":

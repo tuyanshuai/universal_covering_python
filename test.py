@@ -51,15 +51,20 @@ from dbgtool.dbgtool import *
 # plot_ucs(face_new, ucs["pieces"])
 #
 #
-face, vertex = read_off('data/torus.off')
+# face, vertex = read_off('data/torus.off')
+#
+# u = euclidean_ricci_flow(face, vertex)
+# bi = 0
+# hb = compute_greedy_homotopy_basis(face, vertex, bi)
+# face_new, vertex_new, father = slice_mesh(face, vertex, hb)
+#
+# show_mesh(face_new, vertex_new)
+#
+# z = euclidean_embed(face_new, u[father])
+# ucs = compute_ucs(face_new, vertex_new, z, hb, father)
+# plot_ucs(face_new, ucs["pieces"])
 
-u = euclidean_ricci_flow(face, vertex)
-bi = 0
-hb = compute_greedy_homotopy_basis(face, vertex, bi)
-face_new, vertex_new, father = slice_mesh(face, vertex, hb)
 
-show_mesh(face_new, vertex_new)
 
-z = euclidean_embed(face_new, u[father])
-ucs = compute_ucs(face_new, vertex_new, z, hb, father)
-plot_ucs(face_new, ucs["pieces"])
+_, vertex = read_obj('data/davidpts.obj')
+face, uvw = pc_spherical_conformal_map(vertex)
