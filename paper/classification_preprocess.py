@@ -2,8 +2,8 @@ import numpy as np
 import os
 
 categories = ['bathtub', 'bed', 'chair', 'desk', 'dresser', 'monitor', 'night_stand', 'sofa', 'table', 'toilet']
-path = '/home/local/ASUAD/yanshuai/shapeAI/Data/yanshuai/ModelNet10/'
-
+path = '/home/local/ASUAD/yanshuai/shapeAI/Data/yanshuai/ModelNet10'
+pclexe = 'pcl_mesh_sampling'
 
 def OFFtoPLY(path, categories, DataGroup):
     for cat in categories:
@@ -65,14 +65,31 @@ def PLYtoPCD(path, categories, DataGroup):
         files = [x for x in files if x[-4:] == '.ply']
         for file_index, file in enumerate(files):
             fileName = file.split('.')[0]
-            subprocess.call(['pcl_mesh_sampling', path + cat + '/' + DataGroup + '/' + file,
+            subprocess.call([pclexe, path + cat + '/' + DataGroup + '/' + file,
                              path + cat + '/' + DataGroup + '/' + fileName + ".pcd", '-no_vis_result', '-n_samples',
                              '200000', '-leaf_size', '0.01'])
 
 
-if __name__ == "__main__":
-    OFFtoPLY(path, categories, 'train')
-    OFFtoPLY(path, categories, 'test')
+def delPCDHeader(path, categories, DataGroup):
+    for cat in categories:
+        files = os.listdir(path + cat + '/' + DataGroup + '/')
+        files = [x for x in files if x[-4:] == '.pcd']
+        for file_index, file in enumerate(files):
+            with open(path + cat + '/' + DataGroup + '/' + file, 'r') as f:
+                for y in range(9):
+                    f.readline()
+            with open(path + cat + '/' + DataGroup + '/' + file, 'r') as f:
+                data = f.read().splitlines(True)
+            with open(path + cat + '/' + DataGroup + '/' + file, 'w') as f:
+                f.writelines(data[9:])
 
-    PLYtoPCD(path, categories, 'train')
-    PLYtoPCD(path, categories, 'test')
+
+if __name__ == "__main__":
+    # OFFtoPLY(path, categories, 'train')
+    # OFFtoPLY(path, categories, 'test')
+    #
+    # PLYtoPCD(path, categories, 'train')
+    # PLYtoPCD(path, categories, 'test')
+
+    delPCDHeader(path, categories, 'test')
+    delPCDHeader(path, categories, 'test')

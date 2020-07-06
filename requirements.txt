@@ -2,4 +2,5 @@ numpy
 matplotlib
 scipy
 dijkstar
-pymeshfix
+pyntcloud
+# pymeshfix
