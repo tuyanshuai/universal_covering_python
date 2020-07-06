@@ -76,9 +76,6 @@ def delPCDHeader(path, categories, DataGroup):
         files = [x for x in files if x[-4:] == '.pcd']
         for file_index, file in enumerate(files):
             with open(path + cat + '/' + DataGroup + '/' + file, 'r') as f:
-                for y in range(9):
-                    f.readline()
-            with open(path + cat + '/' + DataGroup + '/' + file, 'r') as f:
                 data = f.read().splitlines(True)
             with open(path + cat + '/' + DataGroup + '/' + file, 'w') as f:
                 f.writelines(data[9:])
